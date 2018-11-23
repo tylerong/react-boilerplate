@@ -7,9 +7,11 @@
  */
 
 import React from 'react';
+import { ConnectedRouter } from 'connected-react-router/immutable';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
@@ -29,24 +31,33 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `;
 
-export default function App() {
+export default function App({ history }) {
   return (
-    <AppWrapper>
-      <Helmet
-        titleTemplate="%s - React.js Boilerplate"
-        defaultTitle="React.js Boilerplate"
-      >
-        <meta name="description" content="A React.js Boilerplate application" />
-      </Helmet>
-      <Header />
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/features" component={FeaturePage} />
-        <Route path="/hoc" component={SomeHOC()} />
-        <Route path="" component={NotFoundPage} />
-      </Switch>
-      <Footer />
-      <GlobalStyle />
-    </AppWrapper>
+    <ConnectedRouter history={history}>
+      <AppWrapper>
+        <Helmet
+          titleTemplate="%s - React.js Boilerplate"
+          defaultTitle="React.js Boilerplate"
+        >
+          <meta
+            name="description"
+            content="A React.js Boilerplate application"
+          />
+        </Helmet>
+        <Header />
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/features" component={FeaturePage} />
+          <Route path="/hoc" component={SomeHOC()} />
+          <Route path="" component={NotFoundPage} />
+        </Switch>
+        <Footer />
+        <GlobalStyle />
+      </AppWrapper>
+    </ConnectedRouter>
   );
 }
+
+App.propTypes = {
+  history: PropTypes.object,
+};
